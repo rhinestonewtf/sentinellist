@@ -3,14 +3,13 @@ pragma solidity ^0.8.19;
 
 import "forge-std/Test.sol";
 
-import { LinkedListLib } from "../src/LinkedListLib.sol";
+import { SentinelListLib } from "../src/SentinelList.sol";
 
-/// @title LinkedListTest
 /// @author zeroknots
-contract LinkedListTest is Test {
-    using LinkedListLib for LinkedListLib.LinkedList;
+contract SentinelListTest is Test {
+    using SentinelListLib for SentinelListLib.SentinelList;
 
-    LinkedListLib.LinkedList list;
+    SentinelListLib.SentinelList list;
 
     function setUp() public {
         list.init();

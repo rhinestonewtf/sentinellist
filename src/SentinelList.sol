@@ -4,8 +4,8 @@ pragma solidity ^0.8.0;
 address constant SENTINEL = address(0x1);
 address constant ZERO_ADDRESS = address(0x0);
 
-library LinkedListLib {
-    struct LinkedList {
+library SentinelListLib {
+    struct SentinelList {
         mapping(address => address) entries;
     }
 
@@ -14,12 +14,12 @@ library LinkedListLib {
     error LinkedList_InvalidEntry(address entry);
     error LinkedList_EntryAlreadyInList(address entry);
 
-    function init(LinkedList storage self) internal {
+    function init(SentinelList storage self) internal {
         if (self.entries[SENTINEL] != address(0)) revert LinkedList_AlreadyInitialized();
         self.entries[SENTINEL] = SENTINEL;
     }
 
-    function push(LinkedList storage self, address newEntry) internal {
+    function push(SentinelList storage self, address newEntry) internal {
         if (newEntry == ZERO_ADDRESS || newEntry == SENTINEL) {
             revert LinkedList_InvalidEntry(newEntry);
         }
@@ -28,7 +28,7 @@ library LinkedListLib {
         self.entries[SENTINEL] = newEntry;
     }
 
-    function pop(LinkedList storage self, address prevEntry, address popEntry) internal {
+    function pop(SentinelList storage self, address prevEntry, address popEntry) internal {
         if (popEntry == ZERO_ADDRESS || popEntry == SENTINEL) {
             revert LinkedList_InvalidEntry(prevEntry);
         }
@@ -37,12 +37,12 @@ library LinkedListLib {
         self.entries[popEntry] = ZERO_ADDRESS;
     }
 
-    function contains(LinkedList storage self, address entry) public view returns (bool) {
+    function contains(SentinelList storage self, address entry) public view returns (bool) {
         return SENTINEL != entry && self.entries[entry] != ZERO_ADDRESS;
     }
 
     function getEntriesPaginated(
-        LinkedList storage self,
+        SentinelList storage self,
         address start,
         uint256 pageSize
     )
