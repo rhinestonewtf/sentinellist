@@ -4,6 +4,7 @@ pragma solidity ^0.8.19;
 import "forge-std/Test.sol";
 
 import { SentinelListLib } from "../src/SentinelList.sol";
+import "../src/Helper.sol";
 
 /// @author zeroknots
 contract SentinelListTest is Test {
@@ -47,5 +48,24 @@ contract SentinelListTest is Test {
         assertTrue(list.contains(addr2));
         assertTrue(list.contains(addr3));
         assertTrue(list.contains(addr4));
+
+        (address[] memory array, address next) = list.getEntriesPaginated(address(0x1), 100);
+
+        address remove = addr4;
+        address prev = SentinelListHelper.findPrevious(array, remove);
+        console2.log("prev", prev);
+        console2.log("should be", addr4);
+
+        list.pop(prev, remove);
+        assertFalse(list.contains(remove));
+
+        _log(array, next);
+    }
+
+    function _log(address[] memory array, address next) internal {
+        console2.log("next", next);
+        for (uint256 i = 0; i < array.length; i++) {
+            console2.log("array[%s]: %s", i, array[i]);
+        }
     }
 }
