@@ -15,8 +15,19 @@ library SentinelListLib {
     error LinkedList_EntryAlreadyInList(address entry);
 
     function init(SentinelList storage self) internal {
-        if (self.entries[SENTINEL] != address(0)) revert LinkedList_AlreadyInitialized();
+        if (alreadyInitialized(self)) revert LinkedList_AlreadyInitialized();
         self.entries[SENTINEL] = SENTINEL;
+    }
+
+    function alreadyInitialized(SentinelList storage self) internal view returns (bool) {
+        return self.entries[SENTINEL] != ZERO_ADDRESS;
+    }
+
+    function getNext(SentinelList storage self, address entry) internal view returns (address) {
+        if (entry == ZERO_ADDRESS) {
+            revert LinkedList_InvalidEntry(entry);
+        }
+        return self.entries[entry];
     }
 
     function push(SentinelList storage self, address newEntry) internal {
