@@ -48,7 +48,7 @@ library SentinelListLib {
         self.entries[popEntry] = ZERO_ADDRESS;
     }
 
-    function contains(SentinelList storage self, address entry) public view returns (bool) {
+    function contains(SentinelList storage self, address entry) internal view returns (bool) {
         return SENTINEL != entry && self.entries[entry] != ZERO_ADDRESS;
     }
 
