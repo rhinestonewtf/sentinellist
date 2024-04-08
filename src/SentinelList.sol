@@ -61,7 +61,7 @@ library SentinelListLib {
         view
         returns (address[] memory array, address next)
     {
-        if (start != SENTINEL && contains(self, start)) revert LinkedList_InvalidEntry(start);
+        if (start != SENTINEL && !contains(self, start)) revert LinkedList_InvalidEntry(start);
         if (pageSize == 0) revert LinkedList_InvalidPage();
         // Init array with max page size
         array = new address[](pageSize);

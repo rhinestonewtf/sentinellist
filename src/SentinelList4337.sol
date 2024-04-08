@@ -101,7 +101,7 @@ library SentinelList4337Lib {
         view
         returns (address[] memory array, address next)
     {
-        if (start != SENTINEL && contains(self, account, start)) {
+        if (start != SENTINEL && !contains(self, account, start)) {
             revert LinkedList_InvalidEntry(start);
         }
         if (pageSize == 0) revert LinkedList_InvalidPage();

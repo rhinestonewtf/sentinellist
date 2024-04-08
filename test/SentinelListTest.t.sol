@@ -94,6 +94,28 @@ contract SentinelListTest is Test {
         _log(array, next);
     }
 
+    function testRemove_Pager() public {
+        address addr1 = address(0x11);
+        address addr2 = address(0x12);
+        address addr3 = address(0x13);
+        address addr4 = address(0x14);
+
+        list.push(addr1);
+        list.push(addr2);
+        list.push(addr3);
+        list.push(addr4);
+
+        assertTrue(list.contains(addr1));
+        assertTrue(list.contains(addr2));
+        assertTrue(list.contains(addr3));
+        assertTrue(list.contains(addr4));
+
+        console2.log("get list");
+
+        (address[] memory array, address next) = list.getEntriesPaginated(addr4, 100);
+        _log(array, next);
+    }
+
     function _log(address[] memory array, address next) internal {
         console2.log("next", next);
         for (uint256 i = 0; i < array.length; i++) {
