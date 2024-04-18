@@ -94,6 +94,40 @@ contract SentinelListTest is Test {
         _log(array, next);
     }
 
+    function testRemoveAll() public {
+        address addr1 = makeAddr("1");
+        address addr2 = makeAddr("2");
+        address addr3 = makeAddr("3");
+        address addr4 = makeAddr("4");
+
+        list.push(addr1);
+        list.push(addr2);
+        list.push(addr3);
+        list.push(addr4);
+
+        list.popAll();
+
+        assertFalse(list.contains(addr1));
+        assertFalse(list.contains(addr2));
+        assertFalse(list.contains(addr3));
+        assertFalse(list.contains(addr4));
+
+        (address[] memory array, address next) = list.getEntriesPaginated(address(0x1), 100);
+        // assertEq(array.length, 0);
+
+        assertFalse(list.alreadyInitialized());
+
+        // address remove = addr4;
+        // address prev = SentinelListHelper.findPrevious(array, remove);
+        // console2.log("prev", prev);
+        // console2.log("should be", addr4);
+
+        // list.pop(prev, remove);
+        // assertFalse(list.contains(remove));
+
+        // _log(array, next);
+    }
+
     function testRemove_Pager() public {
         address addr1 = address(0x11);
         address addr2 = address(0x12);
