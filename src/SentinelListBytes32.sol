@@ -48,6 +48,16 @@ library LinkedBytes32Lib {
         self.entries[popEntry] = ZERO;
     }
 
+    function popAll(LinkedBytes32 storage self) internal {
+        bytes32 next = self.entries[SENTINEL];
+        while (next != ZERO) {
+            bytes32 current = next;
+            next = self.entries[next];
+            self.entries[current] = ZERO;
+        }
+        self.entries[SENTINEL] = ZERO;
+    }
+
     function contains(LinkedBytes32 storage self, bytes32 entry) internal view returns (bool) {
         return SENTINEL != entry && self.entries[entry] != ZERO;
     }
