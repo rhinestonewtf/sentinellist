@@ -79,6 +79,16 @@ library SentinelList4337Lib {
         self.entries[popEntry][account] = ZERO_ADDRESS;
     }
 
+    function popAll(SentinelList storage self, address account) internal {
+        address next = self.entries[SENTINEL][account];
+        while (next != ZERO_ADDRESS) {
+            address current = next;
+            next = self.entries[next][account];
+            self.entries[current][account] = ZERO_ADDRESS;
+        }
+        self.entries[SENTINEL][account] = ZERO_ADDRESS;
+    }
+
     function contains(
         SentinelList storage self,
         address account,
@@ -125,7 +135,7 @@ library SentinelList4337Lib {
          *       because the `next` variable (which is a entry by itself) acting as a pointer to the start of the next page is neither
          *       incSENTINELrent page, nor will it be included in the next one if you pass it as a start.
          */
-        if (next != SENTINEL) {
+        if (next != SENTINEL && entryCount > 0) {
             next = array[entryCount - 1];
         }
         // Set correct size of returned array
