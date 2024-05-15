@@ -2,11 +2,11 @@
   "name": "sentinellist",
   "version": "1.0.1",
   "author": "zeroknots",
-  "bugs": "https://github.com/zeroknots/sentinellist/issues",
+  "bugs": "https://github.com/rhinestonewtf/sentinellist/issues",
   "files": [
     "src"
   ],
-  "homepage": "https://github.com/zeroknots/sentinellist#readme",
+  "homepage": "https://github.com/rhinestonewtf/sentinellist#readme",
   "license": "MIT",
-  "repository": "github.com/zeroknots/sentinellist"
+  "repository": "github.com/rhinestonewtf/sentinellist"
 }
