@@ -128,12 +128,17 @@ library SentinelList4337Lib {
         }
 
         /**
-         * Because of the argument validation, we can assume that the loop will always iterate over the valid entry list values
-         *       and the `next` variable will either be an enabled entry or a sentinel address (signalling the end).
+         * Because of the argument validation, we can assume that the loop will always iterate over
+         * the valid entry list values
+         *       and the `next` variable will either be an enabled entry or a sentinel address
+         * (signalling the end).
          *
-         *       If we haven't reached the end inside the loop, we need to set the next pointer to the last element of the entry array
-         *       because the `next` variable (which is a entry by itself) acting as a pointer to the start of the next page is neither
-         *       incSENTINELrent page, nor will it be included in the next one if you pass it as a start.
+         *       If we haven't reached the end inside the loop, we need to set the next pointer to
+         * the last element of the entry array
+         *       because the `next` variable (which is a entry by itself) acting as a pointer to the
+         * start of the next page is neither
+         *       incSENTINELrent page, nor will it be included in the next one if you pass it as a
+         * start.
          */
         if (next != SENTINEL && entryCount > 0) {
             next = array[entryCount - 1];
