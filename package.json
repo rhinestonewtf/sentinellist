@@ -39,7 +39,7 @@
   "homepage": "https://github.com/rhinestonewtf/sentinellist#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rhinestonewtf/sentinellist.git"
+    "url": "git+https://github.com/rhinestonewtf/sentinellist.git"
   },
   "bugs": {
     "url": "https://github.com/rhinestonewtf/sentinellist/issues"
