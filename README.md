@@ -32,9 +32,9 @@ contract Example {
 }
 ```
 
-### Available functions
+### Available functions
 
-#### `SentinelListLib`
+#### SentinelListLib
 
 - `init(SentinelList storage self)`: Initialize the list (required before using the list and will revert if the list is already initialized)
 - `alreadyInitialized(SentinelList storage self)`: Check if the list is already initialized
@@ -45,7 +45,7 @@ contract Example {
 - `contains(SentinelList storage self, address entry)`: Check if an entry is in the list
 - `getEntriesPaginated(SentinelList storage self, address start, uint256 size)`: Get a paginated list of entries from `start` with a maximum of `size` entries
 
-#### `SentinelList4337Lib`
+#### SentinelList4337Lib
 
 - `init(SentinelList storage self, address account)`: Initialize the list (required before using the list and will revert if the list is already initialized)
 - `alreadyInitialized(SentinelList storage self, address account)`: Check if the list is already initialized
@@ -56,7 +56,7 @@ contract Example {
 - `contains(SentinelList storage self, address account, address entry)`: Check if an entry is in the list
 - `getEntriesPaginated(SentinelList storage self, address account, address start, uint256 size)`: Get a paginated list of entries from `start` with a maximum of `size` entries
 
-#### `LinkedBytes32Lib`
+#### LinkedBytes32Lib
 
 - `init(LinkedBytes32 storage self)`: Initialize the list (required before using the list and will revert if the list is already initialized)
 - `alreadyInitialized(LinkedBytes32 storage self)`: Check if the list is already initialized
