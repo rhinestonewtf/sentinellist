@@ -86,7 +86,6 @@ library SentinelList4337Lib {
             next = self.entries[next][account];
             self.entries[current][account] = ZERO_ADDRESS;
         }
-        self.entries[SENTINEL][account] = ZERO_ADDRESS;
     }
 
     function contains(

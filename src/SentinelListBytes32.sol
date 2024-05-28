@@ -55,7 +55,6 @@ library LinkedBytes32Lib {
             next = self.entries[next];
             self.entries[current] = ZERO;
         }
-        self.entries[SENTINEL] = ZERO;
     }
 
     function contains(LinkedBytes32 storage self, bytes32 entry) internal view returns (bool) {
@@ -71,7 +70,7 @@ library LinkedBytes32Lib {
         view
         returns (bytes32[] memory array, bytes32 next)
     {
-        if (start != SENTINEL && contains(self, start)) revert LinkedList_InvalidEntry(start);
+        if (start != SENTINEL && !contains(self, start)) revert LinkedList_InvalidEntry(start);
         if (pageSize == 0) revert LinkedList_InvalidPage();
         // Init array with max page size
         array = new bytes32[](pageSize);
@@ -98,7 +97,7 @@ library LinkedBytes32Lib {
          *       incSENTINELrent page, nor will it be included in the next one if you pass it as a
          * start.
          */
-        if (next != SENTINEL) {
+        if (next != SENTINEL && entryCount > 0) {
             next = array[entryCount - 1];
         }
         // Set correct size of returned array

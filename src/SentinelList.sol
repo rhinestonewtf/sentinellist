@@ -55,7 +55,6 @@ library SentinelListLib {
             next = self.entries[next];
             self.entries[current] = ZERO_ADDRESS;
         }
-        self.entries[SENTINEL] = ZERO_ADDRESS;
     }
 
     function contains(SentinelList storage self, address entry) internal view returns (bool) {
