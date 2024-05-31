@@ -31,6 +31,21 @@ SentinelListLib::push
         └── it should add the entry to the list
 
 
+SentinelListLib::safePush
+├── when list is not initialized
+│   └── it should initialize list
+└── when list is initialized
+    ├── when entry is zero
+    │   └── it should revert
+    ├── when entry is sentinel
+    │   └── it should revert
+    └── when entry is not sentinel
+        ├── when entry is already added
+        │   └── it should revert
+        └── when entry is not added
+            └── it should add the entry to the list
+
+
 SentinelListLib::pop
 ├── when entry is zero
 │   └── it should revert

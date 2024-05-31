@@ -39,6 +39,13 @@ library SentinelListLib {
         self.entries[SENTINEL] = newEntry;
     }
 
+    function safePush(SentinelList storage self, address newEntry) internal {
+        if (!alreadyInitialized({ self: self })) {
+            init({ self: self });
+        }
+        push({ self: self, newEntry: newEntry });
+    }
+
     function pop(SentinelList storage self, address prevEntry, address popEntry) internal {
         if (popEntry == ZERO_ADDRESS || popEntry == SENTINEL) {
             revert LinkedList_InvalidEntry(prevEntry);

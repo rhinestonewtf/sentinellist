@@ -61,6 +61,13 @@ library SentinelList4337Lib {
         self.entries[SENTINEL][account] = newEntry;
     }
 
+    function safePush(SentinelList storage self, address account, address newEntry) internal {
+        if (!alreadyInitialized(self, account)) {
+            init({ self: self, account: account });
+        }
+        push({ self: self, account: account, newEntry: newEntry });
+    }
+
     function pop(
         SentinelList storage self,
         address account,

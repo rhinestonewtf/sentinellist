@@ -113,6 +113,52 @@ contract SentinelListBytes32Test is Test {
         list.push(bytes32(newEntry));
     }
 
+    function test_SafePushWhenListIsNotInitialized() external {
+        // it should initialize list
+        bytes32 newEntry = keccak256("newEntry");
+        newList.safePush(newEntry);
+
+        assertTrue(newList.alreadyInitialized());
+    }
+
+    function test_SafePushRevertWhen_EntryIsZero() external whenListIsInitialized {
+        // it should revert
+        vm.expectRevert();
+        newList.safePush(ZERO);
+    }
+
+    function test_SafePushRevertWhen_EntryIsSentinel() external whenListIsInitialized {
+        // it should revert
+        vm.expectRevert();
+        newList.safePush(SENTINEL);
+    }
+
+    function test_SafePushRevertWhen_EntryIsAlreadyAdded()
+        external
+        whenListIsInitialized
+        whenEntryIsNotSentinel
+    {
+        // it should revert
+        bytes32 newEntry = keccak256("newEntry");
+        newList.safePush(newEntry);
+
+        bytes32 next = newList.getNext(SENTINEL);
+        assertEq(next, newEntry);
+
+        vm.expectRevert();
+        newList.safePush(newEntry);
+    }
+
+    function test_SafePushWhenEntryIsNotAdded()
+        external
+        whenListIsInitialized
+        whenEntryIsNotSentinel
+    {
+        // it should add the entry to the list
+        bytes32 newEntry = keccak256("newEntry");
+        newList.safePush(newEntry);
+    }
+
     function test_PopRevertWhen_EntryIsZero() external {
         // it should revert
         vm.expectRevert();
@@ -227,6 +273,10 @@ contract SentinelListBytes32Test is Test {
     }
 
     modifier whenEntryIsContainedOrSentinel() {
+        _;
+    }
+
+    modifier whenListIsInitialized() {
         _;
     }
 }

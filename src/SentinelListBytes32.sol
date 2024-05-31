@@ -39,6 +39,13 @@ library LinkedBytes32Lib {
         self.entries[SENTINEL] = newEntry;
     }
 
+    function safePush(LinkedBytes32 storage self, bytes32 newEntry) internal {
+        if (!alreadyInitialized({ self: self })) {
+            init({ self: self });
+        }
+        push({ self: self, newEntry: newEntry });
+    }
+
     function pop(LinkedBytes32 storage self, bytes32 prevEntry, bytes32 popEntry) internal {
         if (popEntry == ZERO || popEntry == SENTINEL) {
             revert LinkedList_InvalidEntry(prevEntry);

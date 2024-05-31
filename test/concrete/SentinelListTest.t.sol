@@ -113,6 +113,52 @@ contract SentinelListTest is Test {
         list.push(address(newEntry));
     }
 
+    function test_SafePushWhenListIsNotInitialized() external {
+        // it should initialize list
+        address newEntry = makeAddr("newEntry");
+        newList.safePush(newEntry);
+
+        assertTrue(newList.alreadyInitialized());
+    }
+
+    function test_SafePushRevertWhen_EntryIsZero() external whenListIsInitialized {
+        // it should revert
+        vm.expectRevert();
+        newList.safePush(ZERO_ADDRESS);
+    }
+
+    function test_SafePushRevertWhen_EntryIsSentinel() external whenListIsInitialized {
+        // it should revert
+        vm.expectRevert();
+        newList.safePush(SENTINEL);
+    }
+
+    function test_SafePushRevertWhen_EntryIsAlreadyAdded()
+        external
+        whenListIsInitialized
+        whenEntryIsNotSentinel
+    {
+        // it should revert
+        address newEntry = makeAddr("newEntry");
+        newList.safePush(address(newEntry));
+
+        address next = newList.getNext(SENTINEL);
+        assertEq(next, newEntry);
+
+        vm.expectRevert();
+        newList.safePush(address(newEntry));
+    }
+
+    function test_SafePushWhenEntryIsNotAdded()
+        external
+        whenListIsInitialized
+        whenEntryIsNotSentinel
+    {
+        // it should add the entry to the list
+        address newEntry = makeAddr("newEntry");
+        newList.safePush(address(newEntry));
+    }
+
     function test_PopRevertWhen_EntryIsZero() external {
         // it should revert
         vm.expectRevert();
@@ -227,6 +273,10 @@ contract SentinelListTest is Test {
     }
 
     modifier whenEntryIsContainedOrSentinel() {
+        _;
+    }
+
+    modifier whenListIsInitialized() {
         _;
     }
 }
