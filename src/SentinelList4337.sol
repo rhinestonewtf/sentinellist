@@ -1,15 +1,20 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+// Sentinel address
 address constant SENTINEL = address(0x1);
+// Zero address
 address constant ZERO_ADDRESS = address(0x0);
 
 /**
- * Implements a linked list, but adheres to ERC-4337 storage restrictions.
- * Intended use: validator modules for modular ERC-4337 smart accounts
- * @author kopy-kat | rhinestone.wtf
+ * @title SentinelListLib
+ * @dev Library for managing a linked list of addresses that is compliant with the ERC-4337
+ * validation rules
+ * @author Rhinestone
  */
 library SentinelList4337Lib {
+    // Struct to hold the linked list
+    // This linked list has the account address as the inner key so it is ERC-4337 compliant
     struct SentinelList {
         mapping(address key => mapping(address account => address entry)) entries;
     }
@@ -19,11 +24,25 @@ library SentinelList4337Lib {
     error LinkedList_InvalidEntry(address entry);
     error LinkedList_EntryAlreadyInList(address entry);
 
+    /**
+     * Initialize the linked list
+     *
+     * @param self The linked list
+     * @param account The account to initialize the linked list for
+     */
     function init(SentinelList storage self, address account) internal {
         if (alreadyInitialized(self, account)) revert LinkedList_AlreadyInitialized();
         self.entries[SENTINEL][account] = SENTINEL;
     }
 
+    /**
+     * Check if the linked list is already initialized
+     *
+     * @param self The linked list
+     * @param account The account to check if the linked list is initialized for
+     *
+     * @return bool True if the linked list is already initialized
+     */
     function alreadyInitialized(
         SentinelList storage self,
         address account
@@ -35,6 +54,15 @@ library SentinelList4337Lib {
         return self.entries[SENTINEL][account] != ZERO_ADDRESS;
     }
 
+    /**
+     * Get the next entry in the linked list
+     *
+     * @param self The linked list
+     * @param account The account to get the next entry for
+     * @param entry The current entry
+     *
+     * @return address The next entry
+     */
     function getNext(
         SentinelList storage self,
         address account,
@@ -50,6 +78,13 @@ library SentinelList4337Lib {
         return self.entries[entry][account];
     }
 
+    /**
+     * Push a new entry to the linked list
+     *
+     * @param self The linked list
+     * @param account The account to push the new entry for
+     * @param newEntry The new entry
+     */
     function push(SentinelList storage self, address account, address newEntry) internal {
         if (newEntry == ZERO_ADDRESS || newEntry == SENTINEL) {
             revert LinkedList_InvalidEntry(newEntry);
@@ -61,6 +96,29 @@ library SentinelList4337Lib {
         self.entries[SENTINEL][account] = newEntry;
     }
 
+    /**
+     * Safe push a new entry to the linked list
+     * @dev This ensures that the linked list is initialized and initializes it if it is not
+     *
+     * @param self The linked list
+     * @param account The account to push the new entry for
+     * @param newEntry The new entry
+     */
+    function safePush(SentinelList storage self, address account, address newEntry) internal {
+        if (!alreadyInitialized(self, account)) {
+            init({ self: self, account: account });
+        }
+        push({ self: self, account: account, newEntry: newEntry });
+    }
+
+    /**
+     * Pop an entry from the linked list
+     *
+     * @param self The linked list
+     * @param account The account to pop the entry for
+     * @param prevEntry The entry before the entry to pop
+     * @param popEntry The entry to pop
+     */
     function pop(
         SentinelList storage self,
         address account,
@@ -79,6 +137,12 @@ library SentinelList4337Lib {
         self.entries[popEntry][account] = ZERO_ADDRESS;
     }
 
+    /**
+     * Pop all entries from the linked list
+     *
+     * @param self The linked list
+     * @param account The account to pop all entries for
+     */
     function popAll(SentinelList storage self, address account) internal {
         address next = self.entries[SENTINEL][account];
         while (next != ZERO_ADDRESS) {
@@ -86,9 +150,17 @@ library SentinelList4337Lib {
             next = self.entries[next][account];
             self.entries[current][account] = ZERO_ADDRESS;
         }
-        self.entries[SENTINEL][account] = ZERO_ADDRESS;
     }
 
+    /**
+     * Check if the linked list contains an entry
+     *
+     * @param self The linked list
+     * @param account The account to check if the entry is in the linked list for
+     * @param entry The entry to check for
+     *
+     * @return bool True if the linked list contains the entry
+     */
     function contains(
         SentinelList storage self,
         address account,
@@ -101,6 +173,17 @@ library SentinelList4337Lib {
         return SENTINEL != entry && self.entries[entry][account] != ZERO_ADDRESS;
     }
 
+    /**
+     * Get all entries in the linked list
+     *
+     * @param self The linked list
+     * @param account The account to get the entries for
+     * @param start The start entry
+     * @param pageSize The page size
+     *
+     * @return array All entries in the linked list
+     * @return next The next entry
+     */
     function getEntriesPaginated(
         SentinelList storage self,
         address account,
