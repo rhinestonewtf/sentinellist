@@ -13,6 +13,8 @@ The library comes with linked lists in different flavors:
 In a contract, you can use the `SentinelList` library to store a linked list of addresses:
 
 ```solidity
+import {SentinelListLib} from "sentinellist/SentinelList.sol";
+
 contract Example {
     using SentinelListLib for SentinelListLib.SentinelList;
 
