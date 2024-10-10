@@ -82,3 +82,13 @@ SentinelListLib::getEntriesPaginated
     └── when page size is not zero
         ├── it should return all entries until page size
         └── it should return the next entry
+
+SentinelListLib::getEntriesInOrderPaginated
+├── when entry is not contained or sentinel
+│   └── it should revert
+└── when entry is contained or sentinel
+    ├── when page size is zero
+    │   └── it should revert
+    └── when page size is not zero
+        ├── it should return all entries in order until page size
+        └── it should return the next entry

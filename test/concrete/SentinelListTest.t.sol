@@ -261,6 +261,33 @@ contract SentinelListTest is Test {
 
         (address[] memory array, address next) = list.getEntriesPaginated(SENTINEL, 4);
         assertEq(array.length, 4);
+        // Example (items should be considered as addresses):
+        // given the following linked list: 1 2 3 4 5 6 7 8
+        // returned array will be: 8 7 6 5
+        for (uint256 i = 0; i < array.length; i++) {
+            assertEq(array[i], makeAddr(vm.toString(amount - i)));
+        }
+        assertEq(next, makeAddr("5"));
+    }
+
+    function test_GetEntriesPaginatedInOrderWhenPageSizeIsNotZero()
+        external
+        whenEntryIsContainedOrSentinel
+    {
+        // it should return all entries in big endian sequence until page size
+        // it should return the next entry
+        uint256 amount = 8;
+        addMany(amount);
+
+        (address[] memory array, address next) = list.getEntriesPaginatedInOrder(SENTINEL, 4);
+
+        assertEq(array.length, 4);
+        // Example (items should be considered as addresses):
+        // given the following linked list: 1 2 3 4 5 6 7 8
+        // returned array will be: 5 6 7 8
+        for (uint256 i = 0; i < array.length; i++) {
+            assertEq(array[i], makeAddr(vm.toString(amount - array.length + 1 + i)));
+        }
         assertEq(next, makeAddr("5"));
     }
 
