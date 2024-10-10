@@ -3,7 +3,6 @@ pragma solidity ^0.8.25;
 
 import "forge-std/Test.sol";
 import { SentinelListLib, SENTINEL, ZERO_ADDRESS } from "src/SentinelList.sol";
-import { SentinelListHelper } from "src/SentinelListHelper.sol";
 
 contract SentinelListTest is Test {
     using SentinelListLib for SentinelListLib.SentinelList;

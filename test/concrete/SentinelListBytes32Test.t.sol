@@ -3,7 +3,6 @@ pragma solidity ^0.8.25;
 
 import "forge-std/Test.sol";
 import { LinkedBytes32Lib, SENTINEL, ZERO } from "src/SentinelListBytes32.sol";
-import { SentinelListHelper } from "src/SentinelListHelper.sol";
 
 contract SentinelListBytes32Test is Test {
     using LinkedBytes32Lib for LinkedBytes32Lib.LinkedBytes32;
