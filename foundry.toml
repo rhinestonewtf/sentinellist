@@ -1,5 +1,5 @@
 [profile.default]
-emv_version = "paris"
+evm_version = "paris"
 solc_version = "0.8.25"
 src = "src"
 out = "out"
