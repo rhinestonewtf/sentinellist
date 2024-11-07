@@ -185,4 +185,46 @@ library SentinelListLib {
             mstore(array, entryCount)
         }
     }
+
+    /**
+     * Get all entries in the linked list
+     *
+     * @param self The linked list
+     * @param start The start entry
+     * @param pageSize The page size
+     *
+     * @return array All entries in the linked list
+     * @return next The next entry
+     */
+    function getEntriesPaginatedInOrder(
+        SentinelList storage self,
+        address start,
+        uint256 pageSize
+    )
+        internal
+        view
+        returns (address[] memory array, address next)
+    {
+        (array, next) = getEntriesPaginated(self, start, pageSize);
+        array = reverse(array);
+    }
+
+    /**
+     * Reverse all entries in a linked list
+     *
+     * @param array The entries in the linked list
+     *
+     * @return reversedArray Reversed entries
+     */
+    function reverse(address[] memory array)
+        internal
+        pure
+        returns (address[] memory reversedArray)
+    {
+        uint256 sizeOfArray = array.length;
+        reversedArray = new address[](sizeOfArray);
+        for (uint256 i; i < sizeOfArray; ++i) {
+            reversedArray[i] = array[sizeOfArray - i - 1];
+        }
+    }
 }
