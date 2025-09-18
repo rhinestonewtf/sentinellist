@@ -174,7 +174,15 @@ contract SentinelList4337Handler {
         return isPushedMapPerAccount[account][entry];
     }
 
-    function getEntriesPaginated(address account, address start, uint256 pageSize) external view returns (address[] memory, address) {
+    function getEntriesPaginated(
+        address account,
+        address start,
+        uint256 pageSize
+    )
+        external
+        view
+        returns (address[] memory, address)
+    {
         return list.getEntriesPaginated(account, start, pageSize);
     }
 

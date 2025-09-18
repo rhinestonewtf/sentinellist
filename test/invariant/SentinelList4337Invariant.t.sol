@@ -19,10 +19,7 @@ contract SentinelList4337InvariantTest is Test {
         selectors[1] = SentinelList4337Handler.pop.selector;
         selectors[2] = SentinelList4337Handler.popAll.selector;
 
-        targetSelector(FuzzSelector({
-            addr: address(handler),
-            selectors: selectors
-        }));
+        targetSelector(FuzzSelector({ addr: address(handler), selectors: selectors }));
     }
 
     function invariant_OnlyPushedEntriesAreInList() public view {
@@ -151,7 +148,9 @@ contract SentinelList4337InvariantTest is Test {
                 bool contains = handler.contains(account, entry);
 
                 if (isPushed) {
-                    assertTrue(contains, "contains() should return true for pushed entries for account");
+                    assertTrue(
+                        contains, "contains() should return true for pushed entries for account"
+                    );
                 }
             }
         }
@@ -176,7 +175,8 @@ contract SentinelList4337InvariantTest is Test {
                     // (This is fine - different accounts can have the same entry addresses)
                     // But let's check that the list structures are independent
                     if (handler.contains(accountA, entry) && handler.contains(accountB, entry)) {
-                        // If same entry exists in both accounts, their next pointers can be different
+                        // If same entry exists in both accounts, their next pointers can be
+                        // different
                         address nextA = handler.getNext(accountA, entry);
                         address nextB = handler.getNext(accountB, entry);
                         // This is allowed - different accounts can have different list structures
@@ -203,26 +203,50 @@ contract SentinelList4337InvariantTest is Test {
                 // Test starting from each entry in the list
                 for (uint256 startIdx = 0; startIdx < actualCount && startIdx < 5; startIdx++) {
                     address startEntry = handler.getPushedEntry(account, startIdx);
-                    _testPaginationFromStart(account, startEntry, pageSize, actualCount - startIdx - 1);
+                    _testPaginationFromStart(
+                        account, startEntry, pageSize, actualCount - startIdx - 1
+                    );
                 }
             }
 
             // Test getting all entries in one page
-            (address[] memory allEntries, address finalNext) = handler.getEntriesPaginated(account, SENTINEL, actualCount);
-            assertEq(allEntries.length, actualCount, "Should get all entries when page size equals count for account");
+            (address[] memory allEntries, address finalNext) =
+                handler.getEntriesPaginated(account, SENTINEL, actualCount);
+            assertEq(
+                allEntries.length,
+                actualCount,
+                "Should get all entries when page size equals count for account"
+            );
 
             for (uint256 i = 0; i < actualCount; i++) {
-                assertEq(allEntries[i], handler.getPushedEntry(account, i), "Full pagination entry should match traversal for account");
+                assertEq(
+                    allEntries[i],
+                    handler.getPushedEntry(account, i),
+                    "Full pagination entry should match traversal for account"
+                );
             }
 
             if (actualCount > 0) {
-                assertEq(finalNext, SENTINEL, "Final next should be SENTINEL when all entries are returned for account");
+                assertEq(
+                    finalNext,
+                    SENTINEL,
+                    "Final next should be SENTINEL when all entries are returned for account"
+                );
             }
         }
     }
 
-    function _testPaginationFromStart(address account, address start, uint256 pageSize, uint256 expectedMaxEntries) internal view {
-        (address[] memory entries, address next) = handler.getEntriesPaginated(account, start, pageSize);
+    function _testPaginationFromStart(
+        address account,
+        address start,
+        uint256 pageSize,
+        uint256 expectedMaxEntries
+    )
+        internal
+        view
+    {
+        (address[] memory entries, address next) =
+            handler.getEntriesPaginated(account, start, pageSize);
 
         uint256 expectedSize = expectedMaxEntries < pageSize ? expectedMaxEntries : pageSize;
         assertEq(entries.length, expectedSize, "Page size should match expected for account");
@@ -237,7 +261,11 @@ contract SentinelList4337InvariantTest is Test {
         for (uint256 i = 0; i < entries.length; i++) {
             if (startIdx + i < handler.getPushedEntriesCount(account)) {
                 address expectedEntry = handler.getPushedEntry(account, startIdx + i);
-                assertEq(entries[i], expectedEntry, "Paginated entry should match traversal at correct offset for account");
+                assertEq(
+                    entries[i],
+                    expectedEntry,
+                    "Paginated entry should match traversal at correct offset for account"
+                );
             }
         }
 
@@ -245,10 +273,18 @@ contract SentinelList4337InvariantTest is Test {
         if (entries.length > 0) {
             if (startIdx + entries.length >= handler.getPushedEntriesCount(account)) {
                 // We've reached the end of the list, next should be SENTINEL
-                assertEq(next, SENTINEL, "Next pointer should be SENTINEL when reaching end of list for account");
+                assertEq(
+                    next,
+                    SENTINEL,
+                    "Next pointer should be SENTINEL when reaching end of list for account"
+                );
             } else {
                 // We haven't reached the end, next should be last returned entry for continuation
-                assertEq(next, entries[entries.length - 1], "Next pointer should be last returned entry for continuation for account");
+                assertEq(
+                    next,
+                    entries[entries.length - 1],
+                    "Next pointer should be last returned entry for continuation for account"
+                );
             }
         }
     }

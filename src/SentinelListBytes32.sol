@@ -115,6 +115,7 @@ library LinkedBytes32Lib {
             next = self.entries[next];
             self.entries[current] = ZERO;
         }
+        self.entries[SENTINEL] = SENTINEL;
     }
 
     /**

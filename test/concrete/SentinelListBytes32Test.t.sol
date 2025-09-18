@@ -2,24 +2,26 @@
 pragma solidity ^0.8.25;
 
 import "forge-std/Test.sol";
-import { LinkedBytes32Lib, SENTINEL, ZERO } from "src/SentinelListBytes32.sol";
-import { SentinelListHelper } from "src/SentinelListHelper.sol";
+import { SENTINEL, ZERO } from "src/SentinelListBytes32.sol";
+import { SentinelListBytes32Wrapper } from "test/utils/SentinelListBytes32Wrapper.sol";
 
 contract SentinelListBytes32Test is Test {
-    using LinkedBytes32Lib for LinkedBytes32Lib.LinkedBytes32;
-
     /*//////////////////////////////////////////////////////////////////////////
                                     VARIABLES
     //////////////////////////////////////////////////////////////////////////*/
 
-    LinkedBytes32Lib.LinkedBytes32 list;
-    LinkedBytes32Lib.LinkedBytes32 newList;
+    SentinelListBytes32Wrapper list;
+    SentinelListBytes32Wrapper newList;
 
     /*//////////////////////////////////////////////////////////////////////////
                                       SETUP
     //////////////////////////////////////////////////////////////////////////*/
 
     function setUp() public {
+        // Deploy wrapper contracts
+        list = new SentinelListBytes32Wrapper();
+        newList = new SentinelListBytes32Wrapper();
+
         // only the first list is initialized
         list.init();
     }
@@ -204,14 +206,14 @@ contract SentinelListBytes32Test is Test {
         }
     }
 
-    function test_PopAllShouldSetSentinelToZero() external {
-        // it should set sentinel to zero
+    function test_PopAllShouldSetSentinelToSentinel() external {
+        // it should set sentinel to sentinel (correct behavior after fix)
         uint256 amount = 8;
         addMany(amount);
         list.popAll();
 
         bytes32 next = list.getNext(SENTINEL);
-        assertEq(next, ZERO);
+        assertEq(next, SENTINEL);
     }
 
     function test_ContainsWhenEntryIsSentinel() external {

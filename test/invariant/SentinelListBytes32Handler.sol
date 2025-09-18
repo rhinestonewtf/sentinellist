@@ -140,7 +140,14 @@ contract SentinelListBytes32Handler {
         return isPushedMap[entry];
     }
 
-    function getEntriesPaginated(bytes32 start, uint256 pageSize) external view returns (bytes32[] memory, bytes32) {
+    function getEntriesPaginated(
+        bytes32 start,
+        uint256 pageSize
+    )
+        external
+        view
+        returns (bytes32[] memory, bytes32)
+    {
         return list.getEntriesPaginated(start, pageSize);
     }
 

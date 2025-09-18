@@ -2,18 +2,16 @@
 pragma solidity ^0.8.25;
 
 import "forge-std/Test.sol";
-import { SentinelList4337Lib, SENTINEL, ZERO_ADDRESS } from "src/SentinelList4337.sol";
-import { SentinelListHelper } from "src/SentinelListHelper.sol";
+import { SENTINEL, ZERO_ADDRESS } from "src/SentinelList4337.sol";
+import { SentinelList4337Wrapper } from "test/utils/SentinelList4337Wrapper.sol";
 
 contract SentinelList4337Test is Test {
-    using SentinelList4337Lib for SentinelList4337Lib.SentinelList;
-
     /*//////////////////////////////////////////////////////////////////////////
                                     VARIABLES
     //////////////////////////////////////////////////////////////////////////*/
 
-    SentinelList4337Lib.SentinelList list;
-    SentinelList4337Lib.SentinelList newList;
+    SentinelList4337Wrapper list;
+    SentinelList4337Wrapper newList;
     address account;
 
     /*//////////////////////////////////////////////////////////////////////////
@@ -22,6 +20,10 @@ contract SentinelList4337Test is Test {
 
     function setUp() public {
         account = makeAddr("account");
+
+        // Deploy wrapper contracts
+        list = new SentinelList4337Wrapper();
+        newList = new SentinelList4337Wrapper();
 
         // only the first list is initialized
         list.init(account);
@@ -207,14 +209,14 @@ contract SentinelList4337Test is Test {
         }
     }
 
-    function test_PopAllShouldSetSentinelToZero() external {
-        // it should set sentinel to zero
+    function test_PopAllShouldSetSentinelToSentinel() external {
+        // it should set sentinel to sentinel (correct behavior after fix)
         uint256 amount = 8;
         addMany(amount);
         list.popAll(account);
 
         address next = list.getNext(account, SENTINEL);
-        assertEq(next, ZERO_ADDRESS);
+        assertEq(next, SENTINEL);
     }
 
     function test_ContainsWhenEntryIsSentinel() external {

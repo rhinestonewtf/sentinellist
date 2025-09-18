@@ -19,10 +19,7 @@ contract SentinelListInvariantTest is Test {
         selectors[1] = SentinelListHandler.pop.selector;
         selectors[2] = SentinelListHandler.popAll.selector;
 
-        targetSelector(FuzzSelector({
-            addr: address(handler),
-            selectors: selectors
-        }));
+        targetSelector(FuzzSelector({ addr: address(handler), selectors: selectors }));
     }
 
     function invariant_OnlyPushedEntriesAreInList() public view {
@@ -31,10 +28,7 @@ contract SentinelListInvariantTest is Test {
         for (uint256 i = 0; i < pushedCount; i++) {
             address entry = handler.getPushedEntry(i);
             if (handler.isPushed(entry)) {
-                assertTrue(
-                    handler.contains(entry),
-                    "Pushed entry should be in list"
-                );
+                assertTrue(handler.contains(entry), "Pushed entry should be in list");
             }
         }
     }
@@ -51,10 +45,7 @@ contract SentinelListInvariantTest is Test {
                 break;
             }
 
-            assertTrue(
-                handler.isPushed(next),
-                "All entries in list should be marked as pushed"
-            );
+            assertTrue(handler.isPushed(next), "All entries in list should be marked as pushed");
 
             current = next;
             iterations++;
@@ -145,20 +136,36 @@ contract SentinelListInvariantTest is Test {
         }
 
         // Test getting all entries in one page
-        (address[] memory allEntries, address finalNext) = handler.getEntriesPaginated(SENTINEL, actualCount);
-        assertEq(allEntries.length, actualCount, "Should get all entries when page size equals count");
+        (address[] memory allEntries, address finalNext) =
+            handler.getEntriesPaginated(SENTINEL, actualCount);
+        assertEq(
+            allEntries.length, actualCount, "Should get all entries when page size equals count"
+        );
 
         for (uint256 i = 0; i < actualCount; i++) {
-            assertEq(allEntries[i], handler.getPushedEntry(i), "Full pagination entry should match traversal");
+            assertEq(
+                allEntries[i],
+                handler.getPushedEntry(i),
+                "Full pagination entry should match traversal"
+            );
         }
 
         // When we get all entries, next should be SENTINEL (end of list)
         if (actualCount > 0) {
-            assertEq(finalNext, SENTINEL, "Final next should be SENTINEL when all entries are returned");
+            assertEq(
+                finalNext, SENTINEL, "Final next should be SENTINEL when all entries are returned"
+            );
         }
     }
 
-    function _testPaginationFromStart(address start, uint256 pageSize, uint256 expectedMaxEntries) internal view {
+    function _testPaginationFromStart(
+        address start,
+        uint256 pageSize,
+        uint256 expectedMaxEntries
+    )
+        internal
+        view
+    {
         (address[] memory entries, address next) = handler.getEntriesPaginated(start, pageSize);
 
         uint256 expectedSize = expectedMaxEntries < pageSize ? expectedMaxEntries : pageSize;
@@ -174,7 +181,11 @@ contract SentinelListInvariantTest is Test {
         for (uint256 i = 0; i < entries.length; i++) {
             if (startIdx + i < handler.getPushedEntriesCount()) {
                 address expectedEntry = handler.getPushedEntry(startIdx + i);
-                assertEq(entries[i], expectedEntry, "Paginated entry should match traversal at correct offset");
+                assertEq(
+                    entries[i],
+                    expectedEntry,
+                    "Paginated entry should match traversal at correct offset"
+                );
             }
         }
 
@@ -182,10 +193,16 @@ contract SentinelListInvariantTest is Test {
         if (entries.length > 0) {
             if (startIdx + entries.length >= handler.getPushedEntriesCount()) {
                 // We've reached the end of the list, next should be SENTINEL
-                assertEq(next, SENTINEL, "Next pointer should be SENTINEL when reaching end of list");
+                assertEq(
+                    next, SENTINEL, "Next pointer should be SENTINEL when reaching end of list"
+                );
             } else {
                 // We haven't reached the end, next should be last returned entry for continuation
-                assertEq(next, entries[entries.length - 1], "Next pointer should be last returned entry for continuation");
+                assertEq(
+                    next,
+                    entries[entries.length - 1],
+                    "Next pointer should be last returned entry for continuation"
+                );
             }
         }
     }

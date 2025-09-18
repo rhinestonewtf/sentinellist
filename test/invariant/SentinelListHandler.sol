@@ -140,7 +140,14 @@ contract SentinelListHandler {
         return isPushedMap[entry];
     }
 
-    function getEntriesPaginated(address start, uint256 pageSize) external view returns (address[] memory, address) {
+    function getEntriesPaginated(
+        address start,
+        uint256 pageSize
+    )
+        external
+        view
+        returns (address[] memory, address)
+    {
         return list.getEntriesPaginated(start, pageSize);
     }
 }
