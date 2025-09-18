@@ -115,6 +115,7 @@ library SentinelListLib {
             next = self.entries[next];
             self.entries[current] = ZERO_ADDRESS;
         }
+        self.entries[SENTINEL] = SENTINEL;
     }
 
     /**

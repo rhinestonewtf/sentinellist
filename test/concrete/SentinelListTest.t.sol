@@ -40,6 +40,11 @@ contract SentinelListTest is Test {
         }
     }
 
+    address one = address(0x10);
+    address two = address(0x20);
+    address three = address(0x30);
+    address four = address(0x40);
+
     /*//////////////////////////////////////////////////////////////////////////
                                       TESTS
     //////////////////////////////////////////////////////////////////////////*/
@@ -279,4 +284,5 @@ contract SentinelListTest is Test {
     modifier whenListIsInitialized() {
         _;
     }
+
 }
