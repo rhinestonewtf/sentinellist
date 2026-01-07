@@ -150,6 +150,7 @@ library SentinelList4337Lib {
             next = self.entries[next][account];
             self.entries[current][account] = ZERO_ADDRESS;
         }
+        self.entries[SENTINEL][account] = SENTINEL;
     }
 
     /**
